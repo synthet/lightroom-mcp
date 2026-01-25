@@ -1,0 +1,63 @@
+{
+  "version": "1.0.0",
+  "agent": {
+    "name": "Lightroom MCP Agent",
+    "contextFiles": [
+      "../CLAUDE.md",
+      "../agents.md",
+      "../README.md",
+      "../.cursorrules"
+    ],
+    "preferences": {
+      "alwaysVerifyConnection": true,
+      "checkSelectionBeforeModify": true,
+      "confirmBatchOperations": true,
+      "provideFeedback": true
+    }
+  },
+  "mcp": {
+    "server": "lightroom",
+    "tools": {
+      "get_studio_info": {
+        "description": "Get catalog information",
+        "useCase": "Verify connection and identify active catalog"
+      },
+      "get_selection": {
+        "description": "Get selected photos details",
+        "useCase": "Check what photos will be affected before modifications"
+      },
+      "set_rating": {
+        "description": "Set star rating (0-5)",
+        "useCase": "Photo culling and quality-based organization"
+      },
+      "set_label": {
+        "description": "Set color label",
+        "useCase": "Categorize and organize photos"
+      },
+      "set_caption": {
+        "description": "Set photo caption",
+        "useCase": "Add descriptions and metadata"
+      }
+    }
+  },
+  "workflows": {
+    "photoCulling": {
+      "enabled": true,
+      "steps": [
+        "get_selection",
+        "analyze",
+        "set_rating",
+        "set_label"
+      ]
+    },
+    "metadataEnhancement": {
+      "enabled": true,
+      "steps": [
+        "get_selection",
+        "generate_captions",
+        "set_caption",
+        "set_label"
+      ]
+    }
+  }
+}

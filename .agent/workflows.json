@@ -1,0 +1,80 @@
+{
+  "workflows": [
+    {
+      "id": "photo-culling",
+      "name": "Photo Culling Assistant",
+      "description": "Help photographers cull through large batches of photos",
+      "steps": [
+        {
+          "step": 1,
+          "action": "get_selection",
+          "description": "Retrieve photo details"
+        },
+        {
+          "step": 2,
+          "action": "analyze",
+          "description": "Analyze filenames, existing ratings, or other metadata"
+        },
+        {
+          "step": 3,
+          "action": "set_rating",
+          "description": "Mark keepers/rejects with ratings"
+        },
+        {
+          "step": 4,
+          "action": "set_label",
+          "description": "Categorize photos with color labels"
+        }
+      ]
+    },
+    {
+      "id": "metadata-enhancement",
+      "name": "Metadata Enhancement",
+      "description": "Enhance photo metadata with captions and labels",
+      "steps": [
+        {
+          "step": 1,
+          "action": "get_selection",
+          "description": "Get current metadata"
+        },
+        {
+          "step": 2,
+          "action": "generate_captions",
+          "description": "Generate or update captions based on filenames, dates, or context"
+        },
+        {
+          "step": 3,
+          "action": "set_caption",
+          "description": "Apply new captions"
+        },
+        {
+          "step": 4,
+          "action": "set_label",
+          "description": "Organize by content with color labels"
+        }
+      ]
+    },
+    {
+      "id": "catalog-management",
+      "name": "Catalog Management",
+      "description": "Manage and organize catalogs",
+      "steps": [
+        {
+          "step": 1,
+          "action": "get_studio_info",
+          "description": "Verify connection and get catalog details"
+        },
+        {
+          "step": 2,
+          "action": "get_selection",
+          "description": "Understand current state"
+        },
+        {
+          "step": 3,
+          "action": "batch_operations",
+          "description": "Perform batch operations based on user requests"
+        }
+      ]
+    }
+  ]
+}

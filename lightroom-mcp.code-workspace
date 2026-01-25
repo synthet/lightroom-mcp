@@ -91,7 +91,12 @@
 		// File associations
 		"files.associations": {
 			"*.lrplugin": "lua"
-		}
+		},
+		"cursorpyright.analysis.autoImportCompletions": true,
+		"cursorpyright.analysis.extraPaths": [
+			"${workspaceFolder:mcp-server}"
+		],
+		"cursorpyright.analysis.typeCheckingMode": "basic"
 	},
 	"extensions": {
 		"recommendations": [

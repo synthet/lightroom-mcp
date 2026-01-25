@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "lightroom": {
+      "command": "d:/Projects/lightroom-mcp/mcp-server/.venv/Scripts/python.exe",
+      "args": [
+        "d:/Projects/lightroom-mcp/mcp-server/server.py"
+      ]
+    }
+  }
+}

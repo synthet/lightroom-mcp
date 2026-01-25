@@ -1,0 +1,29 @@
+=== MCP Bridge Debug Analysis ===
+
+Plugin Information:
+  Path: D:\Projects\lightroom-mcp\lightroom-plugin.lrplugin
+  Version: nil
+  Name: nil
+
+Server Status:
+  Running: true
+  Port Status: Server flag is true
+
+Catalog Information:
+  Catalog Path: D:\Photos\Lightroom\Lightroom Catalog.lrcat
+  Total Photos: 0
+  Selected Photos: 1
+
+Recent Log Entries:
+Sat Jan 24 22:08:25 2026 [Server]: Sending response for: get_photo_preview
+Sat Jan 24 22:08:25 2026 [Server]: Response sent successfully
+Sat Jan 24 22:08:31 2026 [Server]: Received request: get_studio_info
+Sat Jan 24 22:08:31 2026 [Server]: Handler success for: get_studio_info
+Sat Jan 24 22:08:31 2026 [Server]: Sending response for: get_studio_info
+Sat Jan 24 22:08:31 2026 [Server]: Response sent successfully
+Sat Jan 24 22:08:39 2026 [Server]: Received request: get_photo_preview
+Sat Jan 24 22:08:40 2026 [Server]: Handler success for: get_photo_preview
+Sat Jan 24 22:08:40 2026 [Server]: Sending response for: get_photo_preview
+Sat Jan 24 22:08:40 2026 [Server]: Response sent successfully
+
+=== End Debug Analysis ===

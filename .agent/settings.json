@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "agent": {
+    "name": "Lightroom MCP Agent",
+    "description": "AI agent configuration for Lightroom MCP operations",
+    "defaultBehavior": {
+      "verifyConnection": true,
+      "checkSelectionBeforeModify": true,
+      "confirmBatchOperations": true,
+      "provideFeedback": true
+    }
+  },
+  "lightroom": {
+    "connection": {
+      "host": "localhost",
+      "port": 54321,
+      "timeout": 5,
+      "retryAttempts": 3,
+      "retryDelay": 1
+    },
+    "operations": {
+      "batchSize": null,
+      "defaultRating": null,
+      "defaultLabel": null
+    }
+  },
+  "workflows": {
+    "photoCulling": {
+      "enabled": true,
+      "autoRate": false,
+      "ratingStrategy": "conservative"
+    },
+    "metadataEnhancement": {
+      "enabled": true,
+      "autoCaption": false,
+      "captionSource": "filename"
+    },
+    "catalogManagement": {
+      "enabled": true,
+      "autoVerify": true
+    }
+  },
+  "safety": {
+    "requireConfirmationFor": [
+      "ratingChanges",
+      "labelChanges",
+      "captionChanges"
+    ],
+    "maxPhotosPerOperation": null,
+    "dryRun": false
+  },
+  "logging": {
+    "level": "info",
+    "logOperations": true,
+    "logErrors": true
+  }
+}

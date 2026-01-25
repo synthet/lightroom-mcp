@@ -1,0 +1,8 @@
+# Agent-specific temporary files
+*.log
+*.tmp
+*.cache
+
+# User-specific settings (optional - uncomment if you want to ignore user overrides)
+# user-settings.json
+# local-settings.json
