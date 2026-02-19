@@ -1412,29 +1412,30 @@ Agents should:
 
 The following features have been implemented and are available:
 
-✅ **Photo search and filtering** - `search_photos()`, `find_photos()`  
-✅ **Collection management** - `list_collections()`, `add_to_collection()`, `create_smart_collection()`  
-✅ **Keyword operations** - `add_keywords()`, `remove_keywords()`, `get_keywords()`  
-✅ **Title management** - `set_title()`  
-✅ **Pick flag operations** - `set_pick_flag()`  
-✅ **Advanced metadata** - `set_metadata()`, `get_metadata()`  
-✅ **Develop settings access** - `get_develop_settings()`, `set_develop_settings()` - Full Camera Raw API support  
-✅ **Develop presets** - `list_develop_presets()`, `apply_develop_preset()`  
-✅ **Develop snapshots** - `create_snapshot()`, `list_snapshots()`  
-✅ **Photo selection** - `select_photos()`, `select_all()`, `select_none()`, `next_photo()`, `previous_photo()`  
-✅ **Module navigation** - `switch_module()`, `get_current_module()`  
-✅ **View control** - `show_view()` - Library and Develop view modes  
-✅ **EXIF metadata** - `get_exif_data()` - Camera, lens, exposure, GPS, dimensions  
-✅ **IPTC metadata** - `get_iptc_data()`, `set_iptc_data()` - Creator, copyright, location  
-✅ **XMP metadata** - `get_xmp_data()` - File info, editing history, catalog info  
-✅ **Comprehensive metadata** - `get_all_metadata()` - All metadata in one call  
-✅ **GPS operations** - `set_gps_data()`, `clear_gps_data()` - Geotagging and privacy  
-✅ **File metadata reading** - `read_file_metadata()` - Read EXIF/IPTC from any image file  
-✅ **Photo lookup** - `find_photo_by_path()`, `find_photo_by_filename()`, `find_photo_by_hash()` - Find catalog entries  
-✅ **Folder management** - `list_folders()` - Catalog folder hierarchy  
-✅ **Virtual copies** - `create_virtual_copy()` - Multiple edit versions  
-✅ **Photo rotation** - `rotate_photo()` - Orientation correction  
-✅ **Thumbnails** - `get_photo_preview()` - Image previews
+✅ **Photo search and filtering** - `search_photos()`, `find_photos()`
+✅ **Collection management** - `list_collections()`, `add_to_collection()`, `create_smart_collection()`
+✅ **Keyword operations** - `add_keywords()`, `remove_keywords()`, `get_keywords()`
+✅ **Title management** - `set_title()`
+✅ **Pick flag operations** - `set_pick_flag()`
+✅ **Advanced metadata** - `set_metadata()`, `get_metadata()`
+✅ **Develop settings access** - `get_develop_settings()`, `set_develop_settings()` - Full Camera Raw API support
+✅ **Develop presets** - `list_develop_presets()`, `apply_develop_preset()`
+✅ **Develop snapshots** - `create_snapshot()`, `list_snapshots()`
+✅ **Photo selection** - `select_photos()`, `select_all()`, `select_none()`, `next_photo()`, `previous_photo()`
+✅ **Module navigation** - `switch_module()`, `get_current_module()`
+✅ **View control** - `show_view()` - Library and Develop view modes
+✅ **EXIF metadata** - `get_exif_data()` - Camera, lens, exposure, GPS, dimensions
+✅ **IPTC metadata** - `get_iptc_data()`, `set_iptc_data()` - Creator, copyright, location
+✅ **XMP metadata** - `get_xmp_data()` - File info, editing history, catalog info
+✅ **Comprehensive metadata** - `get_all_metadata()` - All metadata in one call
+✅ **GPS operations** - `set_gps_data()`, `clear_gps_data()` - Geotagging and privacy
+✅ **File metadata reading** - `read_file_metadata()` - Read EXIF/IPTC from any image file
+✅ **Photo lookup** - `find_photo_by_path()`, `find_photo_by_filename()`, `find_photo_by_hash()` - Find catalog entries
+✅ **Folder management** - `list_folders()` - Catalog folder hierarchy
+✅ **Virtual copies** - `create_virtual_copy()` - Multiple edit versions
+✅ **Photo rotation** - `rotate_photo()` - Orientation correction
+✅ ✅ **Thumbnails** - `get_photo_preview()` - Image previews
+✅ **Release automation** - `release` workflow - Standardized changelog, commit, and push flow
 
 ## Future Enhancements
 
