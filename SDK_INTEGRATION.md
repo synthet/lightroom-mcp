@@ -20,7 +20,7 @@ The SDK is located in `lightroom_SDK/` and includes:
 ### Core Modules
 
 - **LrApplication** - Access to active catalog and application state
-- **LrSocket** - TCP socket communication (port 54321)
+- **LrSocket** - TCP socket communication (port 8086)
 - **LrTasks** - Asynchronous task management
 - **LrFunctionContext** - Resource lifecycle management
 - **LrLogger** - Logging and debugging
@@ -113,7 +113,7 @@ serverSocket = LrSocket.bind {
     name = "MCP Bridge Server",
     functionContext = context,
     address = "localhost",
-    port = 54321,
+    port = 8086,
     mode = "receive",  -- Server receives messages
     onConnecting = function(socket, port) ... end,
     onConnected = function(socket, port) ... end,
@@ -293,7 +293,7 @@ Smart collections use `catalog:createSmartCollection()`:
 
 ```lua
 catalog:withWriteAccessDo( "MCP Create Smart Collection", function( context )
-    catalog:createSmartCollection( 
+    catalog:createSmartCollection(
         "Collection Name",
         searchDesc,  -- Same format as findPhotos
         nil,         -- Parent collection set (optional)

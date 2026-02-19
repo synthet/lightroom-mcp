@@ -18,7 +18,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 # Broker configuration
-BROKER_URL = "http://127.0.0.1:54321"
+BROKER_URL = "http://127.0.0.1:8085"
 BROKER_SCRIPT = Path(__file__).parent / "broker.py"
 REQUEST_TIMEOUT = 35  # Slightly longer than broker's internal timeout
 

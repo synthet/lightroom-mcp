@@ -4,11 +4,11 @@ Bridge between [Adobe Lightroom Classic](https://www.adobe.com/products/photosho
 
 ## Architecture
 
-- **Lightroom Plugin** (`lightroom-plugin.lrplugin/`) — Lua plugin running inside Lightroom Classic. Listens on `localhost:54321` and handles commands over a TCP socket (JSON-RPC 2.0).
+- **Lightroom Plugin** (`lightroom-plugin.lrplugin/`) — Lua plugin running inside Lightroom Classic. Listens on `localhost:8085` (HTTP) and `localhost:8086` (Socket).
 - **MCP Server** (`mcp-server/`) — Python [FastMCP](https://github.com/jlowin/fastmcp) server that exposes Lightroom as MCP tools and connects to the plugin.
 
 ```
-┌─────────────────┐     MCP      ┌──────────────┐  TCP :54321  ┌─────────────────────┐
+┌─────────────────┐     MCP      ┌──────────────┐  HTTP :8085  ┌─────────────────────┐
 │ Cursor / Agent  │ ◄──────────► │ MCP Server   │ ◄──────────► │ Lightroom + Plugin  │
 └─────────────────┘              └──────────────┘              └─────────────────────┘
 ```
@@ -27,7 +27,7 @@ Bridge between [Adobe Lightroom Classic](https://www.adobe.com/products/photosho
    - **macOS:** `~/Library/Application Support/Adobe/Lightroom/Modules/`
    - **Windows:** `%APPDATA%\Adobe\Lightroom\Modules\`
 2. In Lightroom: **File → Plug-in Manager → Add** and select the plugin folder, or place it in **Modules** and restart Lightroom.
-3. Ensure the plugin is **Enabled**. It starts a TCP server on port **54321** when Lightroom launches.
+3. Ensure the plugin is **Enabled**. It starts a server on port **8085** (HTTP) and **8086** (Socket) when Lightroom launches.
 
 ### 2. MCP server (Python)
 
@@ -104,7 +104,7 @@ lightroom-mcp/
 
 ## SDK Integration
 
-The plugin is built against **Lightroom SDK 15.0** and follows SDK best practices. 
+The plugin is built against **Lightroom SDK 15.0** and follows SDK best practices.
 
 **Download the SDK**: [Adobe Lightroom Classic SDK](https://developer.adobe.com/console/4061681/servicesandapis)
 
@@ -116,7 +116,7 @@ See **[SDK_INTEGRATION.md](./SDK_INTEGRATION.md)** for:
 
 ## Troubleshooting
 
-- **"No response from Lightroom"** — Lightroom must be running, plugin enabled, and nothing else using port **54321**. Restart Lightroom and try again.
+- **"No response from Lightroom"** — Lightroom must be running, plugin enabled, and nothing else using port **8085**. Restart Lightroom and try again.
 - **MCP server fails to start** — Check Python version, venv, and `pip install -r requirements.txt`. Run from `mcp-server` or set `cwd` correctly in MCP config.
 - **"can't open file 'server.py'" / "No such file or directory"** — Cursor may run the MCP server from your home directory and ignore `cwd`. Use **absolute paths** for both `command` (venv Python) and `args` (path to `server.py`), e.g. `"command": "d:/Projects/lightroom-mcp/mcp-server/.venv/Scripts/python.exe"` and `"args": ["d:/Projects/lightroom-mcp/mcp-server/server.py"]`. Adjust paths if you cloned the repo elsewhere.
 - **Tools fail** — Ensure photos are selected when using `set_rating`, `set_label`, or `set_caption`. Call `get_selection` first to verify.

@@ -1,10 +1,12 @@
 {
   "mcpServers": {
     "lightroom": {
-      "command": "d:/Projects/lightroom-mcp/mcp-server/.venv/Scripts/python.exe",
+      "command": "d:\\Projects\\lightroom-mcp\\mcp-server\\.venv\\Scripts\\python.exe",
       "args": [
-        "d:/Projects/lightroom-mcp/mcp-server/server.py"
-      ]
+        "d:\\Projects\\lightroom-mcp\\mcp-server\\server.py"
+      ],
+      "cwd": "d:\\Projects\\lightroom-mcp\\mcp-server",
+      "disabled": true
     }
   }
 }

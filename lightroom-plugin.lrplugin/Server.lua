@@ -21,8 +21,8 @@ _G.mcpShutdownComplete = false
 
 -- Broker configuration
 local BROKER_HOST = "127.0.0.1"
-local BROKER_HTTP_PORT = 54321
-local BROKER_SOCKET_PORT = 54322
+local BROKER_HTTP_PORT = 8085
+local BROKER_SOCKET_PORT = 8086
 local BROKER_URL = "http://" .. BROKER_HOST .. ":" .. BROKER_HTTP_PORT
 local POLL_INTERVAL = 0.1  -- seconds between polls
 local HTTP_FAIL_THRESHOLD = 5  -- consecutive HTTP failures before fallback

@@ -35,9 +35,9 @@ logger = logging.getLogger(__name__)
 # Configuration
 # ============================================================================
 
-BROKER_PORT = 54321
+BROKER_PORT = 8085
 BROKER_HOST = '127.0.0.1'
-SOCKET_PORT = 54322  # Fallback socket port for plugin
+SOCKET_PORT = 8086  # Fallback socket port for plugin
 REQUEST_TIMEOUT = 30  # seconds
 POLL_TIMEOUT = 0.5  # seconds for long-polling
 LR_CONNECTION_TIMEOUT = 5  # seconds before considering LR disconnected
