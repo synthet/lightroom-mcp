@@ -174,3 +174,5 @@ python test_connection.py
 - Handle errors gracefully and provide user-friendly feedback
 - Remember that operations affect ALL selected photos (batch operations)
 - When in doubt, refer to `agents.md` for tool semantics and examples
+
+@AGENTS.md

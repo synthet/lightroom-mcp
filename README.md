@@ -85,6 +85,7 @@ See **[agents.md](./agents.md)** for detailed tool semantics and agent workflows
 ```
 lightroom-mcp/
 ├── README.md           # This file
+├── docs/               # Knowledge index, including TourBox vs this server
 ├── agents.md           # Documentation for AI Agents
 ├── SDK_INTEGRATION.md  # Deep dive into LrSDK integration
 ├── lightroom-plugin.lrplugin/   # Lua Plugin
