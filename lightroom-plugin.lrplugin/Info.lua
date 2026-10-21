@@ -24,6 +24,10 @@ return {
     -- File menu items
     LrExportMenuItems = {
         {
+            title = "Auto Settings",
+            file = "AutoSettings.lua",
+        },
+        {
             title = "MCP Bridge Status",
             file = "DebugAnalysis.lua",
         },
@@ -31,6 +35,11 @@ return {
 
     -- Library menu items
     LrLibraryMenuItems = {
+        {
+            title = "Auto Settings",
+            file = "AutoSettings.lua",
+            enabledWhen = "photosAvailable",
+        },
         {
             title = "MCP Bridge Debug Analysis",
             file = "DebugAnalysis.lua",

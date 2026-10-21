@@ -110,6 +110,48 @@ class TestBrokerUnit(unittest.TestCase):
         self.assertTrue(event.is_set())
         self.assertEqual(broker.pending_requests[request_uuid]["response"], response_data)
 
+    def test_auto_edit_missing_image(self):
+        client = broker.app.test_client()
+        res = client.post('/auto_edit', json={})
+        self.assertEqual(res.status_code, 400)
+        data = res.get_json()
+        self.assertIn("error", data)
+
+    def test_auto_edit_invalid_base64(self):
+        client = broker.app.test_client()
+        res = client.post('/auto_edit', json={"image": 12345})
+        self.assertEqual(res.status_code, 400)
+
+    @patch('broker.GeminiAPIProvider')
+    def test_auto_edit_success(self, mock_provider_cls):
+        import asyncio
+        from unittest.mock import AsyncMock
+        mock_provider_instance = MagicMock()
+        mock_provider_cls.return_value = mock_provider_instance
+        mock_settings = MagicMock()
+        mock_settings.model_dump.return_value = {
+            "exposure": 0.5,
+            "contrast": 15,
+            "highlights": -20,
+            "shadows": 25
+        }
+        mock_provider_instance.process = AsyncMock(return_value=mock_settings)
+
+        import base64
+        test_img_b64 = base64.b64encode(b"fake-jpeg-data").decode('utf-8')
+
+        client = broker.app.test_client()
+        res = client.post('/auto_edit', json={
+            "image": test_img_b64,
+            "localId": "123",
+            "intent": "clean_commercial"
+        })
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertEqual(data.get("status"), "ok")
+        self.assertEqual(data.get("settings", {}).get("exposure"), 0.5)
+
+
 from datetime import datetime, timezone
 
 if __name__ == '__main__':

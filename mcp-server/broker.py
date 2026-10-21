@@ -87,6 +87,14 @@ else:
 HISTORY_FILE = os.path.join(base_dir, "broker_history.json")
 HISTORY_AUTO_SAVE = True  # Auto-save history after each request
 
+# Add parent directory to path to support loading auto_settings
+sys.path.insert(0, os.path.abspath(os.path.join(base_dir, "..")))
+try:
+    from auto_settings.src.providers.gemini_api_provider import GeminiAPIProvider
+except ImportError as e:
+    logger.warning(f"Could not import auto_settings: {e}")
+    GeminiAPIProvider = None
+
 # ============================================================================
 # History Save/Load Functions
 # ============================================================================
@@ -444,6 +452,72 @@ def handle_response():
 
     except Exception as e:
         broker_log("ERROR", f"Error handling response: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+# ============================================================================
+# API Endpoints - Auto Settings
+# ============================================================================
+
+import base64
+import tempfile
+from pathlib import Path
+import asyncio
+
+@app.route('/auto_edit', methods=['POST'])
+def handle_auto_edit():
+    """
+    Handle auto-settings request from Lightroom Plugin.
+    Receives base64 JPEG, calls Gemini provider, returns Lightroom settings.
+    """
+    try:
+        data = request.get_json()
+        if not data or 'image' not in data:
+            return jsonify({"error": "Missing image data"}), 400
+
+        if not GeminiAPIProvider:
+            return jsonify({"error": "Auto-settings module not loaded"}), 500
+
+        try:
+            image_bytes = base64.b64decode(data['image'])
+        except Exception as e:
+            return jsonify({"error": f"Invalid base64 encoding: {e}"}), 400
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir) / "preview.jpg"
+            tmp_path.write_bytes(image_bytes)
+
+            provider = GeminiAPIProvider()
+            intent = data.get("intent")
+            exif_data = data.get("exif")
+
+            try:
+                # Support passing intent and exif to provider if supported
+                import inspect
+                sig = inspect.signature(provider.process)
+                kwargs = {}
+                if "intent" in sig.parameters and intent:
+                    kwargs["intent"] = intent
+                if "exif" in sig.parameters and exif_data:
+                    kwargs["exif"] = exif_data
+
+                settings = asyncio.run(provider.process(tmp_path, **kwargs))
+            except RuntimeError:
+                # Fallback if an event loop is already active in this thread
+                loop = asyncio.new_event_loop()
+                try:
+                    settings = loop.run_until_complete(provider.process(tmp_path))
+                finally:
+                    loop.close()
+
+            broker_log("INFO", "Auto-settings generated successfully")
+            return jsonify({
+                "status": "ok",
+                "settings": settings.model_dump()
+            })
+
+    except Exception as e:
+        broker_log("ERROR", f"Error in /auto_edit: {e}")
         return jsonify({"error": str(e)}), 500
 
 

@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from mcp.server.fastmcp import FastMCP, Context
 from mcp.server.session import ServerSession
 from mcp.shared.exceptions import McpError
-from mcp.types import INVALID_PARAMS, INTERNAL_ERROR, INVALID_REQUEST, METHOD_NOT_FOUND, PARSE_ERROR
+from mcp.types import INVALID_PARAMS, INTERNAL_ERROR, INVALID_REQUEST, METHOD_NOT_FOUND, PARSE_ERROR, ErrorData
 
 class ErrorCode:
     PARSE_ERROR = PARSE_ERROR
@@ -85,13 +85,13 @@ async def get_studio_info(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_selection(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -105,13 +105,13 @@ async def get_selection(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_rating(rating: int, ctx: Context[ServerSession, AppContext]) -> str:
@@ -122,7 +122,7 @@ async def set_rating(rating: int, ctx: Context[ServerSession, AppContext]) -> st
         rating: Integer between 0 and 5.
     """
     if not (0 <= rating <= 5):
-        raise McpError(ErrorCode.INVALID_PARAMS, "Rating must be between 0 and 5")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="Rating must be between 0 and 5"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -130,13 +130,13 @@ async def set_rating(rating: int, ctx: Context[ServerSession, AppContext]) -> st
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_label(label: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -148,7 +148,7 @@ async def set_label(label: str, ctx: Context[ServerSession, AppContext]) -> str:
     """
     valid_labels = ['Red', 'Yellow', 'Green', 'Blue', 'Purple', 'None']
     if label not in valid_labels:
-        raise McpError(ErrorCode.INVALID_PARAMS, f"Label must be one of {valid_labels}")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"Label must be one of {valid_labels}"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -156,13 +156,13 @@ async def set_label(label: str, ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_caption(caption: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -175,13 +175,13 @@ async def set_caption(caption: str, ctx: Context[ServerSession, AppContext]) -> 
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_title(title: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -197,13 +197,13 @@ async def set_title(title: str, ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_pick_flag(pick_flag: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -215,7 +215,7 @@ async def set_pick_flag(pick_flag: str, ctx: Context[ServerSession, AppContext])
     """
     valid_flags = ['pick', 'reject', 'none']
     if pick_flag.lower() not in valid_flags:
-        raise McpError(ErrorCode.INVALID_PARAMS, f"pick_flag must be one of {valid_flags}")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"pick_flag must be one of {valid_flags}"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -223,13 +223,13 @@ async def set_pick_flag(pick_flag: str, ctx: Context[ServerSession, AppContext])
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def add_keywords(keywords: list[str], ctx: Context[ServerSession, AppContext]) -> str:
@@ -240,7 +240,7 @@ async def add_keywords(keywords: list[str], ctx: Context[ServerSession, AppConte
         keywords: Array of keyword strings. Supports hierarchical keywords using ' > ' separator (e.g., "Location > Europe > France").
     """
     if not isinstance(keywords, list):
-        raise McpError(ErrorCode.INVALID_PARAMS, "keywords must be an array")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="keywords must be an array"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -248,13 +248,13 @@ async def add_keywords(keywords: list[str], ctx: Context[ServerSession, AppConte
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def remove_keywords(keywords: list[str], ctx: Context[ServerSession, AppContext]) -> str:
@@ -265,7 +265,7 @@ async def remove_keywords(keywords: list[str], ctx: Context[ServerSession, AppCo
         keywords: Array of keyword strings to remove. Supports hierarchical keywords using ' > ' separator.
     """
     if not isinstance(keywords, list):
-        raise McpError(ErrorCode.INVALID_PARAMS, "keywords must be an array")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="keywords must be an array"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -273,13 +273,13 @@ async def remove_keywords(keywords: list[str], ctx: Context[ServerSession, AppCo
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_keywords(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -293,13 +293,13 @@ async def get_keywords(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def list_collections(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -313,13 +313,13 @@ async def list_collections(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def add_to_collection(collection_name: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -335,13 +335,13 @@ async def add_to_collection(collection_name: str, ctx: Context[ServerSession, Ap
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def search_photos(query: str, ctx: Context[ServerSession, AppContext]) -> Any:
@@ -358,13 +358,13 @@ async def search_photos(query: str, ctx: Context[ServerSession, AppContext]) -> 
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_metadata(field: str, value: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -381,13 +381,13 @@ async def set_metadata(field: str, value: str, ctx: Context[ServerSession, AppCo
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_metadata(fields: list[str], ctx: Context[ServerSession, AppContext]) -> Any:
@@ -399,7 +399,7 @@ async def get_metadata(fields: list[str], ctx: Context[ServerSession, AppContext
     Returns list of photo metadata objects.
     """
     if not isinstance(fields, list):
-        raise McpError(ErrorCode.INVALID_PARAMS, "fields must be an array")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="fields must be an array"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -407,13 +407,13 @@ async def get_metadata(fields: list[str], ctx: Context[ServerSession, AppContext
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 
 def _find_file(filename: str, search_root: str) -> str | None:
@@ -522,13 +522,13 @@ async def get_exif_data(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_iptc_data(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -542,13 +542,13 @@ async def get_iptc_data(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_iptc_data(data: dict, ctx: Context[ServerSession, AppContext]) -> str:
@@ -556,7 +556,7 @@ async def set_iptc_data(data: dict, ctx: Context[ServerSession, AppContext]) -> 
     Set IPTC metadata for the currently selected photos.
     """
     if not isinstance(data, dict):
-        raise McpError(ErrorCode.INVALID_PARAMS, "data must be a dictionary")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="data must be a dictionary"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -564,13 +564,13 @@ async def set_iptc_data(data: dict, ctx: Context[ServerSession, AppContext]) -> 
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_xmp_data(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -584,13 +584,13 @@ async def get_xmp_data(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_all_metadata(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -604,13 +604,13 @@ async def get_all_metadata(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_gps_data(latitude: float, longitude: float, altitude: Optional[float] = None, ctx: Context[ServerSession, AppContext] = None) -> str:
@@ -623,9 +623,9 @@ async def set_gps_data(latitude: float, longitude: float, altitude: Optional[flo
         altitude: Optional GPS altitude in meters
     """
     if not (-90 <= latitude <= 90):
-        raise McpError(ErrorCode.INVALID_PARAMS, "Latitude must be between -90 and 90")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="Latitude must be between -90 and 90"))
     if not (-180 <= longitude <= 180):
-        raise McpError(ErrorCode.INVALID_PARAMS, "Longitude must be between -180 and 180")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="Longitude must be between -180 and 180"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -637,13 +637,13 @@ async def set_gps_data(latitude: float, longitude: float, altitude: Optional[flo
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def clear_gps_data(ctx: Context[ServerSession, AppContext]) -> str:
@@ -656,13 +656,13 @@ async def clear_gps_data(ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 def _extract_exif_value(value):
     """Helper to convert EXIF values to JSON-serializable format."""
@@ -737,7 +737,7 @@ async def get_metadata_by_filename(filename: str, ctx: Context[ServerSession, Ap
         logger.info(f"Found file at {found_path}")
         return await read_file_metadata(found_path, ctx)
 
-    raise McpError(ErrorCode.INTERNAL_ERROR, f"File '{filename}' not found in Lightroom catalog or in {os.path.abspath(search_root)}")
+    raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"File '{filename}' not found in Lightroom catalog or in {os.path.abspath(search_root)}"))
 
 
 @mcp.tool(annotations={"readOnly": True})
@@ -756,11 +756,11 @@ async def read_file_metadata(file_path: str, ctx: Context[ServerSession, AppCont
         - hash: MD5 hash for file identification
     """
     if not HAS_PILLOW:
-        raise McpError(ErrorCode.INTERNAL_ERROR, "Pillow library not installed. Run: pip install Pillow")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="Pillow library not installed. Run: pip install Pillow"))
 
     file_path = os.path.normpath(file_path)
     if not os.path.isfile(file_path):
-        raise McpError(ErrorCode.INVALID_PARAMS, f"File not found: {file_path}")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"File not found: {file_path}"))
 
     try:
         # Basic file info
@@ -879,7 +879,7 @@ async def read_file_metadata(file_path: str, ctx: Context[ServerSession, AppCont
         return result
 
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error reading file metadata: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error reading file metadata: {str(e)}"))
 
 
 @mcp.tool(annotations={"readOnly": True})
@@ -898,13 +898,13 @@ async def find_photo_by_path(file_path: str, ctx: Context[ServerSession, AppCont
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 
 @mcp.tool(annotations={"readOnly": True})
@@ -923,13 +923,13 @@ async def find_photo_by_filename(filename: str, ctx: Context[ServerSession, AppC
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 
 @mcp.tool(annotations={"readOnly": True})
@@ -946,7 +946,7 @@ async def find_photo_by_hash(file_path: str, ctx: Context[ServerSession, AppCont
     """
     file_path = os.path.normpath(file_path)
     if not os.path.isfile(file_path):
-        raise McpError(ErrorCode.INVALID_PARAMS, f"File not found: {file_path}")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"File not found: {file_path}"))
 
     # Calculate hash of the input file
     try:
@@ -956,7 +956,7 @@ async def find_photo_by_hash(file_path: str, ctx: Context[ServerSession, AppCont
                 hasher.update(chunk)
         source_hash = hasher.hexdigest()
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error reading file: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error reading file: {str(e)}"))
 
     # Get filename for initial search
     filename = os.path.basename(file_path)
@@ -965,9 +965,9 @@ async def find_photo_by_hash(file_path: str, ctx: Context[ServerSession, AppCont
     try:
         result = lrc.send_command("find_photo_by_hash", {"filename": filename, "hash": source_hash})
         if result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         if not result or "result" not in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
 
         payload = result["result"]
         if isinstance(payload, str):
@@ -1011,7 +1011,7 @@ async def find_photo_by_hash(file_path: str, ctx: Context[ServerSession, AppCont
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 
 @mcp.tool(annotations={"readOnly": True})
@@ -1046,19 +1046,19 @@ async def get_photo_preview(
             pid = int(str(photo_id).strip())
             select_result = lrc.send_command("select_photos", {"photoIds": [pid]})
             if select_result and "error" in select_result:
-                raise McpError(ErrorCode.INTERNAL_ERROR, f"Error selecting photo: {select_result['error'].get('message', select_result['error'])}")
+                raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error selecting photo: {select_result['error'].get('message', select_result['error'])}"))
         except ValueError:
-            raise McpError(ErrorCode.INVALID_PARAMS, f"Invalid photo_id: {photo_id}")
+            raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"Invalid photo_id: {photo_id}"))
         except Exception as e:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Error selecting photo: {str(e)}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error selecting photo: {str(e)}"))
 
     # Get photo paths from Lightroom for selected photos
     try:
         result = lrc.send_command("get_metadata", {"fields": ["path"]})
         if not result or "result" not in result:
             if result and "error" in result:
-                raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error'].get('message', result['error'])}")
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+                raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error'].get('message', result['error'])}"))
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
 
         payload = result["result"]
         # Handle case where result might be a string (Old API behavior?)
@@ -1066,7 +1066,7 @@ async def get_photo_preview(
             try:
                 payload = json.loads(payload)
             except json.JSONDecodeError:
-                raise McpError(ErrorCode.INTERNAL_ERROR, f"Invalid response from Lightroom: {payload}")
+                raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Invalid response from Lightroom: {payload}"))
 
         metadata_list = payload.get("metadata") or []
         if not metadata_list:
@@ -1075,7 +1075,7 @@ async def get_photo_preview(
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error getting metadata: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error getting metadata: {str(e)}"))
 
     # Generate previews locally
     results = []
@@ -1172,13 +1172,13 @@ async def get_develop_settings(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def set_develop_settings(settings: dict, ctx: Context[ServerSession, AppContext]) -> str:
@@ -1189,7 +1189,7 @@ async def set_develop_settings(settings: dict, ctx: Context[ServerSession, AppCo
         settings: Dictionary of parameter names to values (e.g., {"Exposure": 1.0, "Contrast": 25}).
     """
     if not isinstance(settings, dict):
-        raise McpError(ErrorCode.INVALID_PARAMS, "settings must be a dictionary")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="settings must be a dictionary"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1197,13 +1197,13 @@ async def set_develop_settings(settings: dict, ctx: Context[ServerSession, AppCo
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def list_develop_presets(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -1217,13 +1217,13 @@ async def list_develop_presets(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def apply_develop_preset(preset_name: Optional[str] = None, preset_uuid: Optional[str] = None, ctx: Context[ServerSession, AppContext] = None) -> str:
@@ -1235,7 +1235,7 @@ async def apply_develop_preset(preset_name: Optional[str] = None, preset_uuid: O
         preset_uuid: UUID of the preset to apply (optional if preset_name is provided).
     """
     if not preset_name and not preset_uuid:
-        raise McpError(ErrorCode.INVALID_PARAMS, "Either preset_name or preset_uuid must be provided")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="Either preset_name or preset_uuid must be provided"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1247,13 +1247,13 @@ async def apply_develop_preset(preset_name: Optional[str] = None, preset_uuid: O
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def create_snapshot(name: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -1264,7 +1264,7 @@ async def create_snapshot(name: str, ctx: Context[ServerSession, AppContext]) ->
         name: Name for the snapshot.
     """
     if not name or not isinstance(name, str):
-        raise McpError(ErrorCode.INVALID_PARAMS, "name must be a non-empty string")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="name must be a non-empty string"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1272,13 +1272,13 @@ async def create_snapshot(name: str, ctx: Context[ServerSession, AppContext]) ->
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def list_snapshots(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -1292,13 +1292,13 @@ async def list_snapshots(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 # ============================================================================
 # Selection and Navigation Tools
@@ -1313,7 +1313,7 @@ async def select_photos(photo_ids: list[int], ctx: Context[ServerSession, AppCon
         photo_ids: Array of photo local identifiers (numbers).
     """
     if not isinstance(photo_ids, list):
-        raise McpError(ErrorCode.INVALID_PARAMS, "photo_ids must be an array")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="photo_ids must be an array"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1321,13 +1321,13 @@ async def select_photos(photo_ids: list[int], ctx: Context[ServerSession, AppCon
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def select_all(ctx: Context[ServerSession, AppContext]) -> str:
@@ -1340,13 +1340,13 @@ async def select_all(ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def select_none(ctx: Context[ServerSession, AppContext]) -> str:
@@ -1359,13 +1359,13 @@ async def select_none(ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def next_photo(ctx: Context[ServerSession, AppContext]) -> str:
@@ -1378,13 +1378,13 @@ async def next_photo(ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def previous_photo(ctx: Context[ServerSession, AppContext]) -> str:
@@ -1397,13 +1397,13 @@ async def previous_photo(ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def switch_module(module: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -1415,7 +1415,7 @@ async def switch_module(module: str, ctx: Context[ServerSession, AppContext]) ->
     """
     valid_modules = ['library', 'develop', 'map', 'book', 'slideshow', 'print', 'web']
     if module.lower() not in valid_modules:
-        raise McpError(ErrorCode.INVALID_PARAMS, f"module must be one of {valid_modules}")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"module must be one of {valid_modules}"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1423,13 +1423,13 @@ async def switch_module(module: str, ctx: Context[ServerSession, AppContext]) ->
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def get_current_module(ctx: Context[ServerSession, AppContext]) -> str:
@@ -1443,13 +1443,13 @@ async def get_current_module(ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def show_view(view: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -1465,7 +1465,7 @@ async def show_view(view: str, ctx: Context[ServerSession, AppContext]) -> str:
                    'develop_loupe', 'develop_before_after_horiz', 'develop_before_after_vert',
                    'develop_before', 'develop_reference_horiz', 'develop_reference_vert']
     if view not in valid_views:
-        raise McpError(ErrorCode.INVALID_PARAMS, f"view must be one of {valid_views}")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message=f"view must be one of {valid_views}"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1473,13 +1473,13 @@ async def show_view(view: str, ctx: Context[ServerSession, AppContext]) -> str:
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 # ============================================================================
 # Advanced Search and Organization Tools
@@ -1506,7 +1506,7 @@ async def find_photos(search_desc: dict, ctx: Context[ServerSession, AppContext]
     Returns list of matching photos.
     """
     if not isinstance(search_desc, dict):
-        raise McpError(ErrorCode.INVALID_PARAMS, "search_desc must be a dictionary")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="search_desc must be a dictionary"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1514,13 +1514,13 @@ async def find_photos(search_desc: dict, ctx: Context[ServerSession, AppContext]
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def create_smart_collection(name: str, search_desc: dict, ctx: Context[ServerSession, AppContext]) -> str:
@@ -1532,9 +1532,9 @@ async def create_smart_collection(name: str, search_desc: dict, ctx: Context[Ser
         search_desc: Search descriptor dictionary (same format as find_photos).
     """
     if not name or not isinstance(name, str):
-        raise McpError(ErrorCode.INVALID_PARAMS, "name must be a non-empty string")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="name must be a non-empty string"))
     if not isinstance(search_desc, dict):
-        raise McpError(ErrorCode.INVALID_PARAMS, "search_desc must be a dictionary")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="search_desc must be a dictionary"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1542,13 +1542,13 @@ async def create_smart_collection(name: str, search_desc: dict, ctx: Context[Ser
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"readOnly": True})
 async def list_folders(ctx: Context[ServerSession, AppContext]) -> Any:
@@ -1562,13 +1562,13 @@ async def list_folders(ctx: Context[ServerSession, AppContext]) -> Any:
         if result and "result" in result:
             return result["result"]
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 # ============================================================================
 # Photo Operations Tools
@@ -1592,13 +1592,13 @@ async def create_virtual_copy(copy_name: Optional[str] = None, ctx: Context[Serv
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.tool(annotations={"destructive": True})
 async def rotate_photo(direction: str, ctx: Context[ServerSession, AppContext]) -> str:
@@ -1609,7 +1609,7 @@ async def rotate_photo(direction: str, ctx: Context[ServerSession, AppContext]) 
         direction: Rotation direction - either 'left' or 'right'.
     """
     if direction.lower() not in ['left', 'right']:
-        raise McpError(ErrorCode.INVALID_PARAMS, "direction must be 'left' or 'right'")
+        raise McpError(ErrorData(code=ErrorCode.INVALID_PARAMS, message="direction must be 'left' or 'right'"))
 
     lrc = ctx.request_context.lifespan_context.lrc
     try:
@@ -1617,13 +1617,13 @@ async def rotate_photo(direction: str, ctx: Context[ServerSession, AppContext]) 
         if result and "result" in result:
             return "Success"
         elif result and "error" in result:
-            raise McpError(ErrorCode.INTERNAL_ERROR, f"Lightroom error: {result['error']['message']}")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Lightroom error: {result['error']['message']}"))
         else:
-            raise McpError(ErrorCode.INTERNAL_ERROR, "No response from Lightroom")
+            raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message="No response from Lightroom"))
     except McpError:
         raise
     except Exception as e:
-        raise McpError(ErrorCode.INTERNAL_ERROR, f"Error: {str(e)}")
+        raise McpError(ErrorData(code=ErrorCode.INTERNAL_ERROR, message=f"Error: {str(e)}"))
 
 @mcp.resource("lightroom://status")
 def get_lightroom_status() -> dict:

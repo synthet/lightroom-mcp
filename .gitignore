@@ -29,3 +29,12 @@ preview_test.jpg
 # System
 .DS_Store
 Thumbs.db
+
+.mcp.json
+/.agent/local/
+
+# Local reverse-engineering notes. Not linked from docs/.
+/wiki/notes/_local/
+/.cursor/mcp.json
+/.claude/settings.local.json
+/.agents/mcp_config.json
