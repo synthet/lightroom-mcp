@@ -1,0 +1,11 @@
+bin/
+obj/
+artifacts/
+runs/
+*.user
+.vs/
+.vscode/
+TestResults/
+docs/vendor/*.html
+!docs/vendor/README.md
+.claude/settings.local.json

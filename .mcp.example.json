@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "lightroom-mcp": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["run", "--project", "src/LightroomMcp/LightroomMcp.csproj", "--no-build"],
+      "cwd": "D:\Projects\lightroom-mcp"
+    }
+  }
+}

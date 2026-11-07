@@ -1,0 +1,1 @@
+Put Adobe's exported `LrControllerAPI_<version>.html` here: Lightroom Desktop > Preferences > Interface, hold the key shown. It is gitignored as Adobe documentation; record its version and export date in `../controller-api.md`.

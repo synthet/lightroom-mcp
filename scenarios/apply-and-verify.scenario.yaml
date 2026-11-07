@@ -1,0 +1,57 @@
+# Apply develop values to the current photo through the Lightroom Controller API, then prove they were saved.
+#
+# Semi-automated. You approve the plan at a checkpoint, looking at before.png in the run folder: Lightroom's API
+# documents no "current photo" getter, so you confirm the photo on screen. The run then writes, makes Lightroom
+# save (lr.save: Grid trip), verifies the saved XMP + catalog, and checks that rating and colour label didn't change.
+# If the automatic save writes no file, a second checkpoint asks you to leave the photo by hand.
+#
+#   LightroomMcp scenario run apply-and-verify --dry-run --param photo=DSC_8750 \
+#     --param values='{"Exposure2012":0.2}' --param expect='{"global.Exposure2012":0.2}'
+#   LightroomMcp scenario run apply-and-verify --allow-writes --param photo=DSC_8750 --param values=... --param expect=...
+scenario: apply-and-verify
+version: 2
+description: Plan, approve on screen, apply, save, and verify develop values on one photo.
+target: { processes: [lightroom.exe] }
+params:
+  photo: { type: string, required: true, description: File name Lightroom shows, e.g. DSC_8750 }
+  values: { type: object, required: true, description: 'Camera Raw ids to values, e.g. {"Exposure2012": 0.2, "LocalShadows2012": 30}' }
+  expect: { type: object, required: true, description: 'Saved values to verify, e.g. {"global.Exposure2012": 0.2, "Mask 1.Shadows2012": 30}' }
+  allowExternalControllers: { type: boolean, default: false, description: Write even while TourBox Console runs }
+on_error: { screenshot: true }
+steps:
+  - id: status
+    lr.get_status: {}
+    save: { current: $.currentPhoto, controllers: $.externalControllers }
+  - assert: { expression: "contains(current, params.photo)", message: "Lightroom reports '${current}', not ${params.photo}" }
+    when: "current != null"
+  - lr.capture: { outputPath: before.png }
+  - lr.get_photo_state: {}
+    save: { before: $ }
+  - id: plan
+    lr.set_values: { values: "${params.values}", dryRun: true }
+    save: { planned: $.planned }
+  - checkpoint:
+      message: "Planned: ${planned}. Confirm the photo on screen is ${params.photo} (before.png in the run folder; selected mask: ${before.selectedMask}). External controllers: ${controllers}. Apply?"
+  - lr.now: {}
+    save: { since: $.utc }
+  - id: apply
+    lr.set_values:
+      values: "${params.values}"
+      expectedPhoto: "${params.photo}"
+      skipPhotoCheck: "${current == null}"
+      confirmed: true
+      allowExternalControllers: "${params.allowExternalControllers}"
+    save: { applied: $.results }
+  - id: save
+    lr.save: { returnView: loupe }
+    continueOnError: true
+  - checkpoint: { message: "Lightroom wrote no settings file on the Grid trip. Leave the photo by hand (Grid view), then approve to verify." }
+    when: "!steps.save.ok"
+  - lr.verify_saved: { expect: "${params.expect}", sinceUtc: "${since}", photo: "${params.photo}" }
+    save: { savedFile: $.file, savedUtc: $.savedUtc }
+  - lr.get_photo_state: {}
+    save: { after: $ }
+  - assert:
+      expression: "after.rating == before.rating && after.colorLabel == before.colorLabel && after.flag == before.flag"
+      message: "Rating/label/flag changed during the edit (before ${before}, after ${after})"
+  - log: { message: "Applied ${applied}; saved and verified in ${savedFile} at ${savedUtc}" }

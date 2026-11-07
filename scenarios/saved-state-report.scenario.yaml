@@ -1,0 +1,14 @@
+# Read-only: what Lightroom actually saved for the most recent edit with masks, plus live status.
+# Useful before and after any edit, and immune to the stale mask-panel display.
+#   LightroomMcp scenario run saved-state-report
+scenario: saved-state-report
+version: 1
+description: Live status plus the newest saved settings (global and every mask, in slider units).
+params:
+  requireMasks: { type: boolean, default: true }
+steps:
+  - lr.get_status: {}
+    save: { running: $.lightroomRunning, photo: $.currentPhoto, controllers: $.externalControllers, newest: $.newestSettingsUtc }
+  - lr.read_saved_settings: { requireMasks: "${params.requireMasks}" }
+    save: { file: $.settings.file, saved: $.settings.savedUtc, global: $.settings.global, masks: $.settings.corrections }
+  - log: { message: "Lightroom running=${running}, photo=${photo}, newest save ${saved}, masks=${len(masks)}" }

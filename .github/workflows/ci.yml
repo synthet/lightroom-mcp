@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: lightroom-mcp
+      - uses: actions/checkout@v4
+        with:
+          repository: synthet/win-gui-mcp
+          ref: feat/core-and-scenarios
+          path: win-gui-mcp
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: lightroom-mcp/global.json
+      - name: Build and test
+        working-directory: lightroom-mcp
+        run: dotnet test LightroomMcp.sln --filter "Category!=Live" --logger "console;verbosity=normal"
